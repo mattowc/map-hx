@@ -46,13 +46,8 @@ function initialize() {
 				position: point
 			});
 
-			// TODO:  Get rid of the HTML here, and use a helper function
-			var html = "<b>" + json[i].Market.lat + "</b>"
-			+ "<br />" 
-			+ "<b>" + json[i].Market.lng + "</b>";
-
 			// Bind this to the window
-			bindInfoWindow(marker, map, infowindow, html);
+			bindInfoWindow(marker, map, infowindow, json[i]);
 		}	
 	});
 }
@@ -64,11 +59,78 @@ function initialize() {
  * @param {google.maps.Marker} obj Instance of the marker we are binding to
  * @param {google.maps.Map} obj The map object we are using
  * @param {google.maps.InfoWindow} obj The info window object provided by Google
- * @param {google.maps.html} obj HTML that is used for content
+ * @param {html} obj HTML that is used for content
  */
-function bindInfoWindow(marker, map, infowindow, html) {
+function bindInfoWindow(marker, map, infowindow, json) {
 	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent(html);
+		infowindow.setContent(generateHTML(json));
 		infowindow.open(map, marker);
+		insertHTML(json);
 	});
+}
+
+/**
+ * Generates a variable containing HTML that is useful for the end user
+ * 
+ * @param {JSON Object} obj This JSON must be formatted a certain way
+ * @return {html} obj HTML object containing data useful for infowindow
+ */
+function generateHTML(json) {
+	var html;
+
+	// First display some basic market info
+	html = "<h2>" + json.Market.name + "</h2>";
+	html += "<em>" + json.Market.street + ", " + json.Market.city + "</em><br />";
+	html += "<em>" + json.Market.state + ", " + json.Market.zip + "</em><br />";
+
+	// Next display the contact info
+	html += json.Market.Contact.first + " " + json.Market.Contact.last + "<br />";
+	html += (json.Market.Contact.email) ? json.Market.Contact.email + "<br />": "";
+
+	return html;
+}
+
+/**
+ * This function will display events for a given market.  
+ *     For example, this will display the event times, dates, and what products are offered.
+ *
+ * @param {JSON Object} obj This JSON must be formatted a certain way
+ */
+function insertHTML(json) {
+	var html, i;
+	html = "<h1>" + json.Market.name + "</h1>";
+	// First display each event occuring, just simply the dates...
+	for(i = 0; i<json.Market.Contact.Events.length; i++) {
+		// TODO:  Poor javascript
+		var date = Date.parse(json.Market.Contact.Events[i].start_date);
+		var date2 = Date.parse(json.Market.Contact.Events[i].end_date);
+		var start = date.toString('dddd, MMMM d, yyyy');
+		var end = date2.toString('dddd, MMMM d, yyyy');
+		html += "<div class='hours'>";
+		// Get the start date
+		html += "<h3>";
+		html += start;
+		html += " - ";
+		html += end;
+		html += "</h3>";
+		html += "<br />";
+
+		// Show times...this is verbose
+		// TODO:  Find a way to trim this down
+		times = json.Market.Contact.Events[i];
+
+		// TODO:  Poor javascript
+		html += "<p>";
+		html += "<b>Hours</b><br />";
+		html += (times.monday_open != "00:00:00") ? "Monday:  " + times.monday_open.slice(0, 5) + " - " + times.monday_close.slice(0, 5) + "<br />" : "";
+		html += (times.tuesday_open != "00:00:00") ? "Tuesday:  " + times.tuesday_open.slice(0, 5) + " - " + times.tuesday_close.slice(0, 5) + "<br />" : "";
+		html += (times.wednesday_open != "00:00:00") ? "Wednesday:  " + times.wednesday_open.slice(0, 5) + " - " + times.wednesday_close.slice(0, 5) + "<br />" : "";
+		html += (times.thursday_open != "00:00:00") ? "Thursday:  " + times.thursday_open.slice(0, 5) + " - " + times.thursday_close.slice(0, 5) + "<br />" : "";
+		html += (times.friday_open != "00:00:00") ? "Friday:  " + times.friday_open.slice(0, 5) + " - " + times.friday_close.slice(0, 5) + "<br />" : "";
+		html += (times.saturday_open != "00:00:00") ? "Saturday:  " + times.saturday_open.slice(0, 5) + " - " + times.saturday_close.slice(0, 5) + "<br />" : "";
+		html += (times.sunday_open != "00:00:00") ? "Sunday:  " + times.sunday_open.slice(0, 5) + " - " + times.sunday_close.slice(0, 5) + "<br />" : "";
+		html += "</p>";
+		html += "</div>";
+	}
+	$('#events').html(html);
 }
