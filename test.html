@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <style type="text/css">
+      html { height: 900px }
+      body { height: 900px; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+      .info-title { font-weight: bolder; font-size: 15px; font-family: Arial, Helvetica, sans-serif;}
+      .info-desc { font-size: 11px; font-family: Arial, Helvetica, sans-serif;  }
+      .info-box { display: inline-block; position: relative; top: -20px; border-radius: 5px;}
+    </style>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false">
+	</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+	<script type="text/javascript" src="display.js">
+	</script>
+</head>
+<body onload="initialize()">
+	<div id="map_canvas" style="height: 90%; width: 100%;"></div>
+</body>
+</html>
