@@ -35,19 +35,23 @@ function initialize() {
 
 		// Loop through each market and extract the appropriate data
 		for(var i = 0; i<json.length; i++) {
-			// First instantiate the latitude and longitude
-			var point = new google.maps.LatLng(
-				parseFloat(json[i].Market.lat),
-				parseFloat(json[i].Market.lng));
 
-			// Next, using that point, generate a marker
-			var marker = new google.maps.Marker({
-				map: map,
-				position: point
-			});
 
 			// Bind this to the window
-			bindInfoWindow(marker, map, infowindow, json[i]);
+			if(isDateLaterThanToday(new Date(json[i].Market.Contact.Events[0].end_date))) {
+				// First instantiate the latitude and longitude
+				var point = new google.maps.LatLng(
+					parseFloat(json[i].Market.lat),
+					parseFloat(json[i].Market.lng));
+
+				// Next, using that point, generate a marker
+				var marker = new google.maps.Marker({
+					map: map,
+					position: point
+				});
+
+				bindInfoWindow(marker, map, infowindow, json[i]);
+			}
 		}	
 	});
 }
@@ -133,4 +137,19 @@ function insertHTML(json) {
 		html += "</div>";
 	}
 	$('#events').html(html);
+}
+
+/**
+ * Simply checks to see if a date is later than the current date. 
+ *
+ * @param {Date Object} A date to compare to today
+ * @return {bool} True if date passed is later than, or equal to, today's date.  False if in the past.  
+ */
+function isDateLaterThanToday(date) {
+	var curr = new Date();
+  
+	if(curr <= date) {
+		return true; 
+	}
+	return false;
 }
