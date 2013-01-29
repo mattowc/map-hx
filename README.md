@@ -25,7 +25,7 @@ This method will clear the map of all markers, and empty the array holding said 
 
 ``generateMarkers(byDate, fromDate, toDate): ``
 
-This method will add markers to the map (regardless of whether or not there are existing markers).  If you pass true to the byDate, you can pass two dates that will be used to load markers that contain events between the two dates.  
+This method will add markers to the map (regardless of whether or not there are existing markers).  If you pass true to the byDate, you 0can pass two dates that will be used to load markers that contain events between the two dates.  
 
 3.  JSON Structure:  
 -------------------
