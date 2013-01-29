@@ -12,16 +12,25 @@
       .info-box { display: inline-block; position: relative; top: -20px; border-radius: 5px;}
       .hours { display: block; width: 400px; margin: 0 auto; margin-top: 20px; background: #777; }
     </style>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false">
-	</script>
-	<script type="text/javascript" src="date.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
-	<script type="text/javascript" src="display.js">
-	</script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 </head>
 <body onload="initialize()">
 	<div id="map_canvas" style="height: 90%; width: 100%;"></div>
-	<div id="events"></div>
+	<div id="map-controls" style="display: block;">
+		<input type="button" id="clear-map" value="Clear Map" style="display: block;" />
+
+		<input type="text" id="from-date" />
+		<input type="text" id="to-date" />
+		<input type="button" id="change-map" value="Change Map" />
+	</div>
+	<div id="events"></div><!-- End #events -->
+
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false"></script>
+	<script src="date.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+	<script src="display.js"></script>
 </body>
 </html>

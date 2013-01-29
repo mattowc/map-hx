@@ -8,6 +8,7 @@
 var map;
 var service;
 var infowindow;
+var markersArray = [];
 
 /**
  * When the body DOM is loaded, we can insert the google map, and start
@@ -22,11 +23,21 @@ function initialize() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 
-
 	// Initialize the map & info window
 	map = new google.maps.Map(document.getElementById("map_canvas"), 
 		mapOptions);
 	infowindow = new google.maps.InfoWindow;
+
+	generateMarkers(false);
+}
+
+function generateMarkers(byDate, date1, date2) {
+	var show;
+
+	if(byDate == null || (byDate != false && byDate != true )) {
+		show = true;
+		byDate = false;
+	}
 
 	// Get and parse the JSON
 	$.getJSON("map-data.json", function(json) {
@@ -36,9 +47,22 @@ function initialize() {
 		// Loop through each market and extract the appropriate data
 		for(var i = 0; i<json.length; i++) {
 
+			if(byDate) {
+				show = false;
+				var events = json[i].Market.Contact.Events;
+
+				for(var b = 0; b<events.length; b++) {
+					var startDate = events[b].start_date;
+
+					if(isDateInBetween(new Date(date1), new Date(date2), new Date(startDate))) {
+						show = true;
+					}
+				}
+			}
+			
 
 			// Bind this to the window
-			if(isDateLaterThanToday(new Date(json[i].Market.Contact.Events[0].end_date))) {
+			if(show) {
 				// First instantiate the latitude and longitude
 				var point = new google.maps.LatLng(
 					parseFloat(json[i].Market.lat),
@@ -50,6 +74,7 @@ function initialize() {
 					position: point
 				});
 
+				markersArray.push(marker);
 				bindInfoWindow(marker, map, infowindow, json[i]);
 			}
 		}	
@@ -153,3 +178,54 @@ function isDateLaterThanToday(date) {
 	}
 	return false;
 }
+
+/**
+ * Simply checks to see if a date is later than the current date. 
+ *
+ * @param {Date Object} A date to compare to today
+ * @return {bool} True if date passed is later than, or equal to, today's date.  False if in the past.  
+ */
+function isDateInBetween(fromDate, toDate, eventDate) {
+	var curr = new Date();
+  
+	if(eventDate >= fromDate && eventDate <= toDate) {
+		return true; 
+	}
+	return false;
+}
+
+
+/**
+ * Clears all markers currently on the map, and then resets
+ * the markers array.
+ */
+function clearMapOverlay() {
+	console.log(markersArray.length);
+
+	if( markersArray == null || markersArray.length < 1 )
+		return;
+
+	for(var i = 0; i < markersArray.length; i++) {
+		markersArray[i].setMap(null);
+	}
+
+	markersArray = [];
+}
+
+/**
+ * Event listeners/handlers
+ */
+$('#clear-map').click(function() { 
+	clearMapOverlay();
+});
+
+$('#from-date').datepicker();
+
+$('#to-date').datepicker();
+
+$('#change-map').click(function() {
+	clearMapOverlay();
+	var fromDate = $('#from-date').val();
+	var toDate = $('#to-date').val();
+	generateMarkers(fromDate, toDate);
+})
