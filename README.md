@@ -12,7 +12,7 @@ Add the following to the body tag:
 
 ``<body onload="initialize('my-data.json')">``
 
-Note that you can, and should pass a json file.  You can change the json file anytime after initialization by calling changeMapJSON(filename).  
+Note that you can, and should pass a json file.  You can change the json file anytime after initialization by calling ``changeMapJSON(filename)``.  
 
 This will load all the points onto the map that are currently present in the JSON file.  Refer to the end of this document to see how the JSON must be structured.  
 
@@ -30,7 +30,7 @@ This method will add markers to the map (regardless of whether or not there are 
 3.  JSON Structure:  
 -------------------
 The JSON must follow this structure:  
-
+```json
 [
    {
       "Market":{
@@ -159,3 +159,4 @@ The JSON must follow this structure:
       }
    }
 ]
+```

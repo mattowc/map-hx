@@ -221,7 +221,7 @@ function isDateInBetween(fromDate, toDate, eventDate) {
 function clearMapOverlay() {
 	console.log(markersArray.length);
 
-	if( markersArray == null || markersArray.length < 1 )
+	if(markersArray == null || markersArray.length < 1)
 		return;
 
 	for(var i = 0; i < markersArray.length; i++) {
@@ -232,3 +232,11 @@ function clearMapOverlay() {
 }
 
 
+/**
+ * Changes the JSON source that is currently supplied with the 
+ * provided filename.  Expects something such as "file.json".
+ */
+function changeJSON(filename) {
+	if(filename != null)
+		jsonFile = filename;
+}

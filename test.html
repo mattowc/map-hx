@@ -23,6 +23,7 @@
 		<input type="text" id="from-date" />
 		<input type="text" id="to-date" />
 		<input type="button" id="change-map" value="Change Map" />
+		<input type="button" id="change-source" value="Change Source" />
 	</div>
 	<div id="events"></div><!-- End #events -->
 
@@ -46,6 +47,12 @@
 		var fromDate = $('#from-date').val();
 		var toDate = $('#to-date').val();
 		generateMarkers(true, fromDate, toDate);
+	});
+
+	$('#change-source').click(function() {
+		clearMapOverlay();
+		changeJSON('data.JSON');
+		generateMarkers(false);
 	});
 	</script>
 </body>
