@@ -1,20 +1,17 @@
 Harvest Exchange Maps:
 ======================
 
-How-tos:
---------
-
 1.  Set Up:
 -----------
+
+You must include the Google Maps API v3 js files.  
 
 In your HTML, ensure you have a div with the id named "map_canvas".  This can be any size, or anywhere you want.
 Add the following to the body tag:
 
 ``<body onload="initialize('my-data.json')">``
 
-Note that you can, and should pass a json file.  You can change the json file anytime after initialization by calling ``changeMapJSON(filename)``.  
-
-This will load all the points onto the map that are currently present in the JSON file.  Refer to the end of this document to see how the JSON must be structured.  
+Note that you can, and should pass a json file.  You can change the json file anytime after initialization by calling ``changeMapJSON(filename)``.  This will not load the points contained, you will need to call generateMarkers.  Refer to the end of this document to see how the JSON must be structured.  
 
 2.  Manipulation: 
 ----------------- 
@@ -172,3 +169,15 @@ The JSON must follow this structure:
    }
 ]
 ```
+
+4.  To-dos:
+-----------
+
+This is a work in progress.  A lot of hard work has gone into what exists so far.  Here are imminent to-dos:
+
+*  Proper namespacing
+*  Adherence to google styling guide for javascript
+*  Removal of all HTML from hx-maps.js, allow caller to define HTML
+*  Methods to aquire array of markets (and their events, contacts) based on the given requirements (i.e. date, distance)
+
+As you can see the goal is to create a robust back end that can be used for a variety of purposes and that has as little external dependencies as possible.  
