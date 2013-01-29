@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 </head>
-<body onload="initialize()">
+<body onload="initialize('map-data.json')">
 	<div id="map_canvas" style="height: 90%; width: 100%;"></div>
 	<div id="map-controls" style="display: block;">
 		<input type="button" id="clear-map" value="Clear Map" style="display: block;" />
@@ -31,6 +31,22 @@
 	<script src="date.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-	<script src="display.js"></script>
+	<script src="hx-maps.js"></script>
+	<script>
+	$('#clear-map').click(function() { 
+		clearMapOverlay();
+	});
+
+	$('#from-date').datepicker();
+
+	$('#to-date').datepicker();
+
+	$('#change-map').click(function() {
+		clearMapOverlay();
+		var fromDate = $('#from-date').val();
+		var toDate = $('#to-date').val();
+		generateMarkers(true, fromDate, toDate);
+	});
+	</script>
 </body>
 </html>
