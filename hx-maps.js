@@ -9,6 +9,7 @@ var map;               // Represents the map object itself
 var infowindow;        // Represents the infowindow that will be displayed on marker click
 var markersArray = []; // Array of markers, used to manage markers
 var jsonFile;
+var geo;
 
 /**
  * Preferably called on body load, this will load the map
@@ -32,7 +33,8 @@ function initialize(json) {
 		mapOptions);
 	infowindow = new google.maps.InfoWindow;
 
-	generateMarkers(false);
+
+	generateMarkers();
 }
 
 /**
@@ -41,19 +43,30 @@ function initialize(json) {
  * You can declare that you want to load by date, passing in true
  * and two dates (from, to respectively) to load only markers within
  * that date. 
+ *
+ * options {
+ *   options.byDate: bool;
+ *   date1: str;
+ *   date2: str;
+ *   byDistance:  bool;
+ * }
  */
-function generateMarkers(byDate, date1, date2) {
-	// If the jsonFile is null, then we can't pull any points
+function generateMarkers(options) {
+	// If the jsonFile is null, then we can't plot any points
 	if(jsonFile == null)
 		return;
+
+	// If we weren't passed an options object, instantiate one
+	if(options == null)
+		var options = {};
 
 	// By default set show to true
 	var show = true;
 
-	// If we weren't passed a byDate var, set it to false
-	// This will also set it to false if byDate is not a boolean of some sort
-	if(byDate == null || (byDate != false && byDate != true )) {
-		byDate = false;
+	// If we weren't passed a options.byDate var, set it to false
+	// This will also set it to false if options.byDate is not a boolean of some sort
+	if(options.byDate == null || (options.byDate != false && options.byDate != true )) {
+		options.byDate = false;
 	}
 
 	// Get and parse the JSON
@@ -65,14 +78,15 @@ function generateMarkers(byDate, date1, date2) {
 		// Loop through each market and extract the appropriate data
 		for(var i = 0; i<json.length; i++) {
 
-			if(byDate) {
+			// Check by date
+			if(options.byDate) {
 				show = false;
 				var events = json[i].Market.Contact.Events;
 
 				for(var b = 0; b<events.length; b++) {
 					var startDate = events[b].start_date;
 
-					if(isDateInBetween(new Date(date1), new Date(date2), new Date(startDate))) {
+					if(isDateInBetween(new Date(options.date1), new Date(options.date2), new Date(startDate))) {
 						show = true;
 					}
 				}
@@ -85,6 +99,16 @@ function generateMarkers(byDate, date1, date2) {
 				var point = new google.maps.LatLng(
 					parseFloat(json[i].Market.lat),
 					parseFloat(json[i].Market.lng));
+
+				if(options.byDistance != null && options.byDistance == true) {
+					var anchorage = new google.maps.LatLng(
+						parseFloat(options.lat),
+						parseFloat(options.lng));
+
+					if(!isPointWithinRadius(point, anchorage, options.distance)) {
+						continue; 
+					}
+				}
 
 				// Next, using that point, generate a marker
 				var marker = new google.maps.Marker({
@@ -239,4 +263,24 @@ function clearMapOverlay() {
 function changeJSON(filename) {
 	if(filename != null)
 		jsonFile = filename;
+}
+
+/**
+ * Converts a given number from meters to miles
+ */
+function convertMetersToMiles(meters) {
+	return meters * 0.000621371;
+}
+
+/**
+ * Is this point within a given radius?
+ */
+function isPointWithinRadius(point1, point2, radius) {
+	var meters = google.maps.geometry.spherical.computeDistanceBetween(point1, point2);
+	var miles = convertMetersToMiles(meters);
+
+	if(miles <= radius) 
+		return true;
+	
+	return false;
 }

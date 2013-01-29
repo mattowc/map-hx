@@ -19,13 +19,25 @@ This will load all the points onto the map that are currently present in the JSO
 2.  Manipulation: 
 ----------------- 
 
-``clearMapOverlay():``
+To clear the map, and remove all markers from it so you can work with a clean slate simply call:  
 
-This method will clear the map of all markers, and empty the array holding said markers.  
+```js
+clearMapOverlay();
+```
 
-``generateMarkers(byDate, fromDate, toDate): ``
-
-This method will add markers to the map (regardless of whether or not there are existing markers).  If you pass true to the byDate, you 0can pass two dates that will be used to load markers that contain events between the two dates.  
+You can also generate markers, either by date or distance (if you set both to true, distance takes precendence).  Simply call, using the options shown below:  
+```js
+generateMarkers({
+   byDate: false,
+   date1: "",
+   date2: "",
+   byDistance: false,
+   lat: "",
+   lng: "",
+   distance: 0
+});
+```
+Please note the above method will add markers to the map (regardless of whether or not there are existing markers).  It is a best practice to clear the map first.   
 
 3.  JSON Structure:  
 -------------------

@@ -24,11 +24,17 @@
 		<input type="text" id="to-date" />
 		<input type="button" id="change-map" value="Change Map" />
 		<input type="button" id="change-source" value="Change Source" />
+
+		<div style="clear: both; display: block;"></div>
+		<input type="text" id="lat" />
+		<input type="text" id="lng" />
+		<input type="text" id="radius" />
+		<input type="button" id="change-map-distance" value="Show Only Points Within Distance" />
 	</div>
 	<div id="events"></div><!-- End #events -->
 
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false&libraries=geometry"></script>
 	<script src="date.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
@@ -46,13 +52,30 @@
 		clearMapOverlay();
 		var fromDate = $('#from-date').val();
 		var toDate = $('#to-date').val();
-		generateMarkers(true, fromDate, toDate);
+		generateMarkers({
+			byDate: true, 
+			date1: fromDate, 
+			date2: toDate
+		});
 	});
 
 	$('#change-source').click(function() {
 		clearMapOverlay();
 		changeJSON('data.JSON');
-		generateMarkers(false);
+		generateMarkers();
+	});
+
+	$('#change-map-distance').click(function() {
+		clearMapOverlay();
+		var lat = $('#lat').val();
+		var lng = $('#lng').val();
+		var rad = $('#radius').val();
+		generateMarkers({
+			byDistance: true,
+			lat: lat,
+			lng: lng,
+			distance: rad
+		});
 	});
 	</script>
 </body>
