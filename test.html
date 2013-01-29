@@ -20,21 +20,22 @@
 	<div id="map-controls" style="display: block;">
 		<input type="button" id="clear-map" value="Clear Map" style="display: block;" />
 
-		<input type="text" id="from-date" />
-		<input type="text" id="to-date" />
-		<input type="button" id="change-map" value="Change Map" />
+		<input type="text" id="from-date" placeholder="Date from" />
+		<input type="text" id="to-date" placeholder="Date to" />
+		<input type="button" id="change-map" value="Show Only Points Within Date" />
 		<input type="button" id="change-source" value="Change Source" />
 
 		<div style="clear: both; display: block;"></div>
-		<input type="text" id="lat" />
-		<input type="text" id="lng" />
-		<input type="text" id="radius" />
+		<input type="text" id="lat" placeholder="Latitude" />
+		<input type="text" id="lng" placeholder="Longitude" />
+		<input type="text" id="radius" placeholder="Raidus" />
 		<input type="button" id="change-map-distance" value="Show Only Points Within Distance" />
+		<input type="button" id="change-map-distance-date" value="Show Only Points Within Distance and Date" style="display: block;" />
 	</div>
 	<div id="events"></div><!-- End #events -->
 
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false&libraries=geometry"></script>
+	<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyC9nCorjYWxjr3nRMJThSTTLzACDA0ZqDk&sensor=false&libraries=geometry"></script>
 	<script src="date.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
@@ -77,6 +78,24 @@
 			distance: rad
 		});
 	});
+
+	$('#change-map-distance-date').click(function() {
+		clearMapOverlay();
+		var lat = $('#lat').val();
+		var lng = $('#lng').val();
+		var rad = $('#radius').val();
+		var fromDate = $('#from-date').val();
+		var toDate = $('#to-date').val();
+		generateMarkers({
+			byDate: true, 
+			date1: fromDate, 
+			date2: toDate,
+			byDistance: true,
+			lat: lat,
+			lng: lng,
+			distance: rad
+		});
+	})
 	</script>
 </body>
 </html>
